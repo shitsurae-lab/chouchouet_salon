@@ -1,0 +1,212 @@
+/* ---------------------------------------
+Foundation
+__________________________________________*/
+
+// <======= START: media query
+
+$mq-breakpoints: ('xs': 320px,
+  'sm' : 576px,
+  'md': 768px,
+  'lg' : 992px,
+  'xl': 1200px,
+);
+
+@mixin mq($breakpoint: medium) {
+  @media screen and (min-width: #{map-get($mq-breakpoints, $breakpoint)}) {
+    @content;
+  }
+}
+
+// //END: media query=======>
+
+// START: Gradient difinition
+
+/* mixinの定義 */
+@mixin bg-gradient($angle: 180deg, $color: #0bd, $amount: 20%) {
+  background: linear-gradient($angle, $color, adjust-hue($color, $amount)) fixed;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+// END: Gradient difinition
+/* ---------------------------------------
+Layout
+__________________________________________*/
+.l-wrapper {
+  @include mq(xl) {
+    min-width: 1200px;
+    width: 100%;
+    margin: auto;
+    // overflow: hidden;
+
+  }
+
+}
+
+.l-header {
+  @include mq(xl) {
+    min-width: 1200px;
+    width: 100%;
+    margin: auto;
+    background-image: url(../images/header_background-curve.svg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background-position: top center;
+  }
+}
+
+.l-main {
+  @include mq(xl) {
+    min-width: 1200px;
+    width: 100%;
+    margin: auto;
+  }
+}
+
+/* ---------------------------------------
+Component
+__________________________________________*/
+.c-hamburger {
+  display: none;
+}
+
+.c-btn__close {
+  display: none;
+}
+
+/* ---------------------------------------
+project
+__________________________________________*/
+.p-video {
+  @include mq(xl) {
+    min-width: 1200px;
+    width: 100%;
+    margin: auto;
+    position: relative;
+    padding-top: 56.25%;
+  }
+
+  &__inner {
+    @include mq(xl) {
+      min-width: 1200px;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: auto;
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    min-width: 1200px;
+    width: 100%;
+    padding-top: 56.25%;
+    background: rgba(190, 239, 234, 0.5);
+
+
+  }
+}
+
+.p-navigation {
+  width: 80%;
+  margin: 0 auto;
+
+  & ul {
+    display: flex;
+    justify-content: center;
+
+    & li {
+      position: relative;
+      list-style-type: none;
+      flex-grow: 1.2;
+      flex-shrink: 1;
+      flex-basis: 0%;
+
+      &::before {
+        content: "";
+        width: 1px;
+        height: 24px;
+        background: #fff;
+        position: absolute;
+        top: 16px;
+        opacity: .2;
+      }
+
+      & a {
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        line-height: 60px;
+        width: 100%;
+        display: block;
+        font-weight: bold;
+      }
+
+      & h1 a {
+        text-indent: -200%;
+        font-size: 0.1rem;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+.p-content {
+  @include mq(xl) {
+    min-width: 1200px;
+    width: 100%;
+    margin: auto;
+  }
+
+  &__colored--01 {
+    @include bg-gradient;
+    width: 100%;
+    z-index: 1;
+    overflow: hidden;
+    padding-top: 56.25%;
+  }
+
+  &__colored--02 {
+    @include bg-gradient(45deg, #A0ECD0, 30%);
+    width: 100%;
+    z-index: 1;
+    overflow: hidden;
+    padding-top: 56.25%;
+  }
+
+  &__bgImage {
+    background: #75DBCD url(../images/dog-coast-l.jpg) no-repeat;
+    background-blend-mode: screen;
+    width: 100%;
+    z-index: 1;
+    overflow: hidden;
+    padding-top: 56.25%;
+  }
+
+  &__logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: auto;
+    z-index: 10;
+    opacity: 1;
+
+  }
+
+  &__logo--effect {
+    transition: opacity .8s ease;
+    opacity: 0;
+  }
+}

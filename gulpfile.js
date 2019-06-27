@@ -9,6 +9,12 @@ const autoprefixer = require("autoprefixer");
 //browserSyncプラグインの読み込み
 const browserSync = require("browser-sync");
 
+const imagemin = require('gulp-imagemin');
+
+const imageminMozjpeg = require('imagemin-mozjpeg');
+
+const imageminPngquant = require('imagemin-pngquant');
+
 
 // style.scssの監視タスクを作成する
 gulp.task("sass", function() {
@@ -41,6 +47,59 @@ gulp.task("sass", function() {
     );
   });
 });
+
+gulp.task('imagemin', () =>
+  gulp.src('assets/*.{png,jpg,gif,svg}')
+  .pipe(imagemin([
+    imageminMozjpeg({
+      //画質
+      quality: 70,
+    }),
+    imageminPngquant({
+      //画質
+      quality: 70,
+    }),
+    imagemin.svgo({
+      plugins: [
+        // viewBox属性を削除する（widthとheight属性がある場合）。
+        // 表示が崩れる原因になるので削除しない。
+        {
+          removeViewBox: false
+        },
+        // <metadata>を削除する。
+        // 追加したmetadataを削除する必要はない。
+        {
+          removeMetadata: false
+        },
+        // SVGの仕様に含まれていないタグや属性、id属性やvertion属性を削除する。
+        // 追加した要素を削除する必要はない。
+        {
+          removeUnknownsAndDefaults: false
+        },
+        // コードが短くなる場合だけ<path>に変換する。
+        // アニメーションが動作しない可能性があるので変換しない。
+        {
+          convertShapeToPath: false
+        },
+        // 重複や不要な`<g>`タグを削除する。
+        // アニメーションが動作しない可能性があるので変換しない。
+        {
+          collapseGroups: false
+        },
+        // SVG内に<style>や<script>がなければidを削除する。
+        // idにアンカーが貼られていたら削除せずにid名を縮小する。
+        // id属性は動作の起点となることがあるため削除しない。
+        {
+          cleanupIDs: false
+        },
+      ]
+    }),
+    imagemin.optipng(),
+    imagemin.gifsicle(),
+  ]))
+  .pipe(gulp.dest('images'))
+);
+
 // タスクの設定
 gulp.task("browserSyncTask", function() {
   browserSync({
@@ -57,5 +116,7 @@ gulp.task("browserSyncTask", function() {
   });
 });
 
+
+
 // sassのタスクとbrowserSyncTaskを同時に実行する
-gulp.task("default", gulp.parallel("sass", "browserSyncTask"));
+gulp.task("default", gulp.parallel("sass", "imagemin", "browserSyncTask"));
